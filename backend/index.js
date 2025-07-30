@@ -1,14 +1,14 @@
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
-const config = require("./config.json");
 const jwt = require("jsonwebtoken");
 const { authenticateToken } = require("./utilities");
 const mongoose = require("mongoose");
 const User = require("./Models/user.model");
 const Note = require("./Models/notes.model");
 
-mongoose.connect(config.connectionString);
+
+mongoose.connect(process.env.MONGO_URI);
 const db = mongoose.connection;
 
 // Event listener for successful connection
@@ -133,7 +133,6 @@ app.get("/get-user", authenticateToken, async (req, res) => {
 
 app.get("/get-all-notes/", authenticateToken, async (req, res) => {
   const { user } = req.user;
-
   try {
     const notes = await Note.find({ userId: user._id }).sort({ isPinned: -1 });
 
