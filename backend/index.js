@@ -6,25 +6,9 @@ const { authenticateToken } = require("./utilities");
 const mongoose = require("mongoose");
 const User = require("./Models/user.model");
 const Note = require("./Models/notes.model");
+const connectDB = require("./db");
 
 
-mongoose.connect(process.env.MONGO_URI);
-const db = mongoose.connection;
-
-// Event listener for successful connection
-db.on("connected", () => {
-  console.log("Connected to MongoDB");
-});
-
-// Event listener for connection errors
-db.on("error", (err) => {
-  console.error("MongoDB connection error:", err);
-});
-
-// Event listener for disconnection
-db.on("disconnected", () => {
-  console.log("Disconnected from MongoDB");
-});
 
 const app = express();
 
@@ -288,9 +272,10 @@ app.get("/search-notes/", authenticateToken, async (req, res) => {
 // Start the server only when MongoDB is connected
 const PORT = process.env.PORT || 8000;
 
-db.once("open", () => {
+// Connect DB and start server
+connectDB().then(() => {
   app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    console.log(`Server running on port ${PORT}`);
   });
 });
 
