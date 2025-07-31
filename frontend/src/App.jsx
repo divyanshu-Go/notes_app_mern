@@ -8,6 +8,7 @@ import Signin from './pages/Signin/signin';
 const route = (
       <Router>
         <Routes>
+          <Route path='/' exact element={<Home/>}></Route>
           <Route path='/dashboard' exact element={<Home/>}></Route>
           <Route path='/login' exact element={<Login/>}></Route>
           <Route path='/signin' exact element={<Signin/>}></Route>
